@@ -16,9 +16,21 @@ var getPosts = function(){
 var displayPosts = function(data){
   var messages = [];
   for (var i = 0; i < data.length; i++) {
+    console.log(data[i]['username'],data[i]['text']);
     messages.push('<p>' + data[i]['username'] + ': ' + data[i]['text']+ '</p>');
   }
   $('.posts').append(messages);
+};
+
+var validateData = function(data){
+  if(typeof data === 'string'){
+    if(data.charAt(0) === '<'){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 };
 
 getPosts();
