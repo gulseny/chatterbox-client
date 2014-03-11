@@ -18,26 +18,21 @@
       <!-- Your HTML goes here! -->
       <div class = 'enterName'>
         <form>
-          <label for="name"> User Name:</label>
-          <input id="name" type="text" name="name">
+          <label for="name">  You want to chat?</label>
+          <input id="name" type="text" name="name" placeholder = 'Enter your name here...'>
           <input type="button" id = 'joined' value="Join">
         </form>
-<!-- <form action="">
-  User name: <input type="text" id = 'joined' name="name"><br>
-  Last name: <input type="text" name="lname"><br>
-  <input type="submit" id = 'joinedSubmit' value="Submit">
-</form> -->
-
 
 
         </div>
         <div class = 'enterMessage'>
           <div id = 'userName'></div>
-        <form action="" method="post">
-          <label for="POST-message">Message:</label>
-          <input id="POST-message" type="text" name="message">
-          <input type="submit" value="Send">
-        </form>
+          <form>
+            <label for="message"></label>
+            <input id="message" type="text" name="message" placeholder = 'What do you have to say for yourself?'>
+            <input type="button" id = 'send' value="Send Message">
+          </form>
+
       </div>
       <div class='posts'></div>
     </div>
