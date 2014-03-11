@@ -19,8 +19,10 @@ $(document).ready(function(){
 };
 
   var getPosts = function(){
+    
     $.ajax({
-      // always use this url
+      // always use this 
+
       url: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
       type: 'GET',
       success: function (data) {
@@ -35,14 +37,24 @@ $(document).ready(function(){
 
   var displayPosts = function(data){
     var messages = [];
+    var roomNames = {};
+    var rooms = [];
+    if($('#currentRoom').text()){
+      console.log('Room Selected');
+    }
     for (var i = 0; i < data.length; i++) {
-      // console.log(data[i]['username'],data[i]['text']);
+      if(data[i]['roomname']){
+        roomNames[data[i]['roomname']] = true;
+      }
       var username = (data[i]['username']) ? data[i]['username'] : "Guest";
       var text = (validateData(data[i]['text'])) ? data[i]['text'] : "ILLEGAL XSS";
-
-      messages.push('<p>' + username + ': ' + text+ '</p>');
+      messages.push('<p class = "'+ data[i]['roomname'] +'">' + data[i]['roomname'] + username + ': ' + text+ '</p>');
     }
-    $('.posts').append(messages);
+    for(var keys in roomNames){
+      rooms.push("<li>"+keys+"</li>");
+    }
+    $('.posts').prepend(messages);
+    $('.rooms ul').html(rooms);
   };
 
   var validateData = function(data){
@@ -55,6 +67,9 @@ $(document).ready(function(){
     }
 
   };
+
+
+
 
   var newUser;
  $('#joined').on('click',function(){
@@ -75,11 +90,24 @@ $(document).ready(function(){
     sendPosts(messageObj);
   });
 
+  $('.rooms ul').on('click', 'li', function(){
+    console.log($(this).text());
+    $('#currentRoom').text($(this).text()).show();
+    $('.rooms ul').hide();
+    $('#back').show();
+    var currentRoomName = $(this).text();
+    $('p[class!='+ currentRoomName +']').hide();
+  });
+
+  $('#back').on('click', function(){
+    $('#currentRoom').hide();
+    $('.rooms ul').show();
+    $('#back').hide();
+  });
+
   getPosts();
 
-  setInterval(getPosts(), 1000);
+  setInterval(getPosts, 4000)
+
   
 });
-
-
-

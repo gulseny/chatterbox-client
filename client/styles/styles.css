@@ -86,3 +86,12 @@ form input[type=text] {
 .enterMessage{
     display: none;
 }
+.rooms{
+    float: left;
+    padding-top: 100px;
+    padding-left: 15px;
+}
+
+#back{
+    display: none;
+}
