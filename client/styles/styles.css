@@ -87,11 +87,16 @@ form input[type=text] {
     display: none;
 }
 .rooms{
+    width: 200px;
     float: left;
     padding-top: 100px;
-    padding-left: 15px;
+    padding-left: 0px;
 }
 
 #back{
     display: none;
+}
+
+#newRoom {
+
 }

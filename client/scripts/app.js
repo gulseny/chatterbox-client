@@ -18,14 +18,21 @@ $(document).ready(function(){
   });
 };
 
+var timecode = 0;
+
   var getPosts = function(){
     
     $.ajax({
       // always use this 
 
-      url: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
+      url: 'https://api.parse.com/1/classes/chatterbox',
       type: 'GET',
+      data:{
+        order: '-createdAt',
+        createdAt: '{"$gt": timecode}'
+      },
       success: function (data) {
+        console.log(data.results);
         displayPosts(data.results);
       },
       error: function (data) {
@@ -36,13 +43,13 @@ $(document).ready(function(){
   };
 
   var displayPosts = function(data){
+    console.log(timecode);
     var messages = [];
     var roomNames = {};
     var rooms = [];
-    if($('#currentRoom').text()){
-      console.log('Room Selected');
-    }
+    timecode = data[0]['createdAt'];
     for (var i = 0; i < data.length; i++) {
+      //populating room name object
       if(data[i]['roomname']){
         roomNames[data[i]['roomname']] = true;
       }
@@ -50,11 +57,21 @@ $(document).ready(function(){
       var text = (validateData(data[i]['text'])) ? data[i]['text'] : "ILLEGAL XSS";
       messages.push('<p class = "'+ data[i]['roomname'] +'">' + data[i]['roomname'] + username + ': ' + text+ '</p>');
     }
+
+    //initial GET
+    //updates
+
+
+
     for(var keys in roomNames){
       rooms.push("<li>"+keys+"</li>");
     }
     $('.posts').prepend(messages);
     $('.rooms ul').html(rooms);
+    var currentRoom = $('#currentRoom').text();
+    if(currentRoom){
+      $('p[class!='+ currentRoom +']').hide();
+    }
   };
 
   var validateData = function(data){
@@ -85,7 +102,8 @@ $(document).ready(function(){
     console.log(message);
     var messageObj = {
       username: newUser,
-      text: message
+      text: message,
+      roomname: $('#currentRoom').text() || undefined
     };
     sendPosts(messageObj);
   });
@@ -94,16 +112,38 @@ $(document).ready(function(){
     console.log($(this).text());
     $('#currentRoom').text($(this).text()).show();
     $('.rooms ul').hide();
+    $('.newRoom').hide();
     $('#back').show();
     var currentRoomName = $(this).text();
-    $('p[class!='+ currentRoomName +']').hide();
+    // $('p[class!='+ currentRoomName +']').hide();
+    $('p').each(function(currentRoomName){
+      if(!$(this).hasClass(currentRoomName)){
+        $(this).hide();
+      }
+    });
   });
 
+  // $('li').on('hover', function(){
+  //   $(this).css('color', 'red');
+  // });
+
   $('#back').on('click', function(){
-    $('#currentRoom').hide();
+    $('#currentRoom').text('').hide();
     $('.rooms ul').show();
     $('#back').hide();
+    $('.newRoom').show();
+    $('p').show();
   });
+
+  $('#create').on('click', function(){
+    $('#currentRoom').text($('#newRoom').val());
+    // $(this) = ; 
+    console.log($('#newRoom').val());
+    console.log($('#currentRoom').text());
+    $(this).trigger('.rooms li', 'click');
+  });
+
+
 
   getPosts();
 
