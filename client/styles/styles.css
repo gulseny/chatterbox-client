@@ -86,6 +86,7 @@ form input[type=text] {
 .enterMessage{
     display: none;
 }
+
 .rooms{
     width: 200px;
     float: left;
@@ -97,6 +98,3 @@ form input[type=text] {
     display: none;
 }
 
-#newRoom {
-
-}
